@@ -1,10 +1,13 @@
-import { attempt } from "./sliding-window.js";
-
-export const rm1 = async (req, res, next) => {
+import { sliding_window_counter } from "./sliding-window.counter.js";
+const DEFAULT_CONFIG = {
+    maxRequests: 10,
+    windowSeconds: 60,
+};
+export const rm2 = async (req, res, next) => {
     try {
         const ip = req.ip;
 
-        const result = await attempt(`rate:${ip}`);
+        const result = await sliding_window_counter(`rate:${ip}`,DEFAULT_CONFIG);
         console.log("result == ",result);
         if (!result.allowed) {
             return res.status(429).json({
